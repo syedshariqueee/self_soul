@@ -1,4 +1,5 @@
-import { Link, useLocation } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const NAV_ITEMS = [
   'Home',
@@ -29,8 +30,52 @@ function navIsActive(pathname, item) {
   return pathname === to;
 }
 
+const AUTH_USER_STORAGE_KEY = 'selfSoulUser';
+
+function readStoredUser() {
+  try {
+    const storedUser = localStorage.getItem(AUTH_USER_STORAGE_KEY);
+    return storedUser ? JSON.parse(storedUser) : null;
+  } catch {
+    return null;
+  }
+}
+
+function getDisplayName(user) {
+  if (user?.fullName) return user.fullName.split(' ')[0];
+  if (user?.email) return user.email.split('@')[0];
+  return 'Account';
+}
+
 export default function Header() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const accountMenuRef = useRef(null);
+  const [user, setUser] = useState(() => readStoredUser());
+  const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setUser(readStoredUser());
+    setIsAccountMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (accountMenuRef.current && !accountMenuRef.current.contains(event.target)) {
+        setIsAccountMenuOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  function handleLogout() {
+    localStorage.removeItem(AUTH_USER_STORAGE_KEY);
+    setUser(null);
+    setIsAccountMenuOpen(false);
+    navigate('/login');
+  }
 
   return (
     <header className="relative z-50 border-b border-[#eadfcd] bg-[#f7efe3] px-4 py-3 sm:px-6 md:px-8">
@@ -334,9 +379,51 @@ export default function Header() {
           <button type="button" className="cursor-pointer transition-opacity hover:opacity-70">
             <img src="/icons/shoppingbag.png" alt="Shopping Bag" className="w-[18px] h-[18px] object-contain" />
           </button>
-          <Link to="/login" className="hidden sm:inline cursor-pointer transition-opacity hover:opacity-70">
-            <img src="/icons/account.png" alt="Account" className="w-[18px] h-[18px] object-contain" />
-          </Link>
+          <div ref={accountMenuRef} className="relative hidden sm:inline-flex">
+            {user ? (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setIsAccountMenuOpen((isOpen) => !isOpen)}
+                  className="cursor-pointer transition-opacity hover:opacity-70"
+                  aria-label="Open account menu"
+                  aria-expanded={isAccountMenuOpen}
+                >
+                  <img src="/icons/account.png" alt="" className="w-[18px] h-[18px] object-contain" />
+                </button>
+
+                {isAccountMenuOpen && (
+                  <div className="absolute right-0 top-[calc(100%+18px)] w-48 overflow-hidden rounded-xl bg-[#41534D] font-['Montserrat',sans-serif] text-[15px] font-normal text-[#f7efe3] shadow-[0_10px_25px_rgba(0,0,0,0.18)]">
+                    <div className="flex items-center gap-3 border-b border-[#7b8a84] px-5 py-3.5">
+                      <svg className="h-5 w-5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true">
+                        <circle cx="12" cy="8" r="4" />
+                        <path d="M4 21a8 8 0 0 1 16 0" />
+                      </svg>
+                      <span>{getDisplayName(user)}</span>
+                    </div>
+
+                    <Link to="/profile" className="block px-5 py-2.5 transition-colors hover:bg-[#4b625b]">
+                      Profile
+                    </Link>
+                    <Link to="#" className="block px-5 py-2.5 transition-colors hover:bg-[#4b625b]">
+                      Orders
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={handleLogout}
+                      className="block w-full px-5 py-2.5 text-left transition-colors hover:bg-[#4b625b]"
+                    >
+                      Log Out
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <Link to="/login" className="cursor-pointer transition-opacity hover:opacity-70">
+                <img src="/icons/account.png" alt="Account" className="w-[18px] h-[18px] object-contain" />
+              </Link>
+            )}
+          </div>
         </div>
       </div>
 

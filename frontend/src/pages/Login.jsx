@@ -4,6 +4,12 @@ import Footer from '../components/Footer';
 import BrandStoryBanner from '../components/BrandStoryBanner';
 import Newsletter from '../components/Newsletter';
 
+const AUTH_USER_STORAGE_KEY = 'selfSoulUser';
+
+function saveAuthUser(user) {
+  localStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(user));
+}
+
 export default function Login() {
   const [step, setStep] = useState('login'); // 'login' | 'otp' | 'details'
   const [email, setEmail] = useState('');
@@ -147,6 +153,7 @@ export default function Login() {
       if (data.requiresProfile) {
         setStep('details');
       } else {
+        saveAuthUser(data.user);
         alert('Login successful!');
         window.location.href = '/';
       }
@@ -178,11 +185,12 @@ export default function Login() {
       setIsSubmitting(true);
       setMessage('');
       try {
-        await callApi('/api/auth/profile', {
+        const data = await callApi('/api/auth/profile', {
           method: 'PUT',
           body: JSON.stringify({ email, fullName: name, mobile }),
         });
 
+        saveAuthUser(data.user);
         alert('Account details updated successfully!');
         window.location.href = '/';
       } catch (error) {

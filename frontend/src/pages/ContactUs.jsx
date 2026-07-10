@@ -10,16 +10,25 @@ function ContactUs() {
       <Header />
       
       <main className="flex-grow flex flex-col items-center justify-center px-4 py-20">
-        <div className="w-full max-w-3xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-medium text-[#1a3636] mb-8 uppercase tracking-wide">
-            Contact Us
+        <div className="w-full max-w-[980px] mx-auto text-center">
+          <h1 className="mx-auto mb-8 max-w-full w-[316px] font-['Montserrat',sans-serif] text-[48px] font-medium leading-[162%] tracking-normal text-[#1a3636]">
+            CONTACT US
           </h1>
           
-          <div className="space-y-2 text-[#5a5a5a] text-[15px] mb-16">
-            <p>If you have any questions or feedback or would just like to get in touch please email us</p>
-            <p className="font-semibold text-[#1a3636]">hello@selfsoul.com</p>
-            <p className="pt-2">We'd love to connect with you on social media!</p>
-            <p className="font-semibold text-[#1a3636]">fb.me/selfsoul @selfsoul_healwithnature</p>
+          <div className="mx-auto mb-16 max-w-[980px] font-['Montserrat',sans-serif] text-[16px] font-normal leading-[162%] tracking-normal text-[#41534D]">
+            <p>
+              If you have any questions or feedback
+              <br />
+              or would just like to get in touch
+              <br />
+              please email us <span className="font-semibold">hello@selfsoul.com</span>
+              <br />
+              We&apos;d love to connect with you on
+              <br />
+              social media! fb.me/selfsoul
+              <br />
+              @selfsoul_healwithnature
+            </p>
           </div>
 
           <form className="max-w-2xl mx-auto text-left space-y-8">
@@ -29,7 +38,7 @@ function ContactUs() {
                   type="text" 
                   id="name"
                   placeholder="Name"
-                  className="w-full bg-transparent border-b border-[#d4d4d4] py-2 text-[#1a3636] placeholder-[#8a8a8a] focus:outline-none focus:border-[#1a3636] transition-colors"
+                  className="w-full bg-transparent border-b border-[#d4d4d4] py-2 font-['Montserrat',sans-serif] text-[16px] font-normal leading-[162%] tracking-normal text-[#41534D] placeholder:text-[#41534D] focus:outline-none focus:border-[#1a3636] transition-colors"
                 />
               </div>
               <div className="relative">
@@ -38,7 +47,7 @@ function ContactUs() {
                   id="email"
                   placeholder="Email*"
                   required
-                  className="w-full bg-transparent border-b border-[#d4d4d4] py-2 text-[#1a3636] placeholder-[#8a8a8a] focus:outline-none focus:border-[#1a3636] transition-colors"
+                  className="w-full bg-transparent border-b border-[#d4d4d4] py-2 font-['Montserrat',sans-serif] text-[16px] font-normal leading-[162%] tracking-normal text-[#41534D] placeholder:text-[#41534D] focus:outline-none focus:border-[#1a3636] transition-colors"
                 />
               </div>
             </div>
@@ -48,7 +57,7 @@ function ContactUs() {
                 type="tel" 
                 id="phone"
                 placeholder="Phone Number"
-                className="w-full bg-transparent border-b border-[#d4d4d4] py-2 text-[#1a3636] placeholder-[#8a8a8a] focus:outline-none focus:border-[#1a3636] transition-colors"
+                className="w-full bg-transparent border-b border-[#d4d4d4] py-2 font-['Montserrat',sans-serif] text-[16px] font-normal leading-[162%] tracking-normal text-[#41534D] placeholder:text-[#41534D] focus:outline-none focus:border-[#1a3636] transition-colors"
               />
             </div>
 
@@ -57,7 +66,7 @@ function ContactUs() {
                 type="text"
                 id="comment"
                 placeholder="Comment"
-                className="w-full bg-transparent border-b border-[#d4d4d4] py-2 text-[#1a3636] placeholder-[#8a8a8a] focus:outline-none focus:border-[#1a3636] transition-colors resize-none"
+                className="w-full bg-transparent border-b border-[#d4d4d4] py-2 font-['Montserrat',sans-serif] text-[16px] font-normal leading-[162%] tracking-normal text-[#41534D] placeholder:text-[#41534D] focus:outline-none focus:border-[#1a3636] transition-colors resize-none"
               />
             </div>
 

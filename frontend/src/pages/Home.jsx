@@ -4,9 +4,9 @@ import Newsletter from '../components/Newsletter';
 import BrandStoryBanner from '../components/BrandStoryBanner';
 
 const bathRituals = [
-  { title: "Relaxing", img: "/images/relaxing.jpg" },
-  { title: "Healing", img: "/images/healing.jpg" },
-  { title: "Nourishing", img: "/images/Nourishing.jpg" },
+  { title: "Relaxing", img: "/home/relaxing.jpeg" },
+  { title: "Healing", img: "/home/healing.jpeg" },
+  { title: "Nourishing", img: "/home/nourishing.jpeg" },
 ];
 
 const ingredientTags = [
@@ -32,30 +32,12 @@ export default function Home() {
       <div className="mx-auto w-full max-w-[1366px] bg-white">
         <Header />
 
-        <section
-          className="grid items-center bg-[#f9efe3] px-4 py-10 sm:px-6 md:px-8 md:py-12 lg:px-14 lg:py-16"
-          style={{
-            backgroundImage:
-              "linear-gradient(90deg, rgba(249,239,227,0.98) 0%, rgba(249,239,227,0.95) 34%, rgba(249,239,227,0.35) 62%), url('/images/hero-bg.png')",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-          }}
-        >
-          <div className="max-w-[560px]">
-            <p className="mb-2 font-['Montserrat',sans-serif] text-[36px] font-medium italic leading-[1.62] tracking-normal text-[#1B3638] sm:mb-3">
-              Get more , spend less!
-            </p>
-            <h2 className="max-w-[500px] text-4xl font-semibold leading-[1.15] tracking-[0.01em] text-[#162f43] sm:text-5xl md:text-[58px]">
-              BUY ONE GET SECOND HALF PRICE
-            </h2>
-            <p className="mt-3 text-xl leading-[1.25] text-[#162f43] sm:mt-4 sm:text-2xl md:text-[36px]">
-              Spend ₹600, Unwrap a Surpise gift wrh ₹2100!
-            </p>
-            <button className="mt-6 rounded-full border border-[#233b4d] bg-[#fffdf8] px-7 py-2 text-sm text-[#22384a] shadow-[0_1px_0_rgba(255,255,255,0.8)]">
-              SHOP NOW
-            </button>
-          </div>
+        <section className="relative overflow-hidden bg-[#102418]">
+          <img
+            src="/home/banner.jpeg"
+            alt="Renew your body ritual"
+            className="block h-[260px] w-full object-cover sm:h-[360px] md:h-[460px] lg:h-[520px]"
+          />
         </section>
 
         <section className="bg-[#faf3eb] px-4 py-12 sm:px-6 sm:py-14 md:px-10 md:py-16 lg:px-14">
@@ -92,16 +74,16 @@ export default function Home() {
             marginRight: "calc(50% - 50vw)",
           }}
         >
-          <div className="flex w-full flex-col gap-0 md:h-[720px] md:min-h-[720px] md:flex-row">
+          <div className="flex w-full flex-col gap-0 md:h-[560px] md:min-h-[560px] md:flex-row">
             <img
-              src="/images/mid1.jpg"
+              src="/home/two.jpeg"
               alt="Organic works products in a natural setting"
-              className="block aspect-[4/3] w-full object-cover md:aspect-auto md:h-full md:w-1/2 md:min-h-0"
+              className="block aspect-[4/3] w-full bg-[#102418] object-fill md:aspect-auto md:h-full md:w-1/2 md:min-h-0"
             />
             <img
-              src="/images/mid2.png"
+              src="/home/twoimages.jpeg"
               alt="Hair care benefits"
-              className="block aspect-[4/3] w-full object-cover md:aspect-auto md:h-full md:w-1/2 md:min-h-0"
+              className="block aspect-[4/3] w-full bg-[#102418] object-fill md:aspect-auto md:h-full md:w-1/2 md:min-h-0"
             />
           </div>
         </section>
@@ -250,7 +232,7 @@ export default function Home() {
           className="relative flex min-h-[min(520px,70vh)] w-full items-center justify-center px-6 py-16 md:min-h-[min(580px,65vh)] md:py-24"
           style={{
             backgroundImage:
-              "linear-gradient(rgba(0,0,0,0.06), rgba(0,0,0,0.12)), url('/images/mid3.jpg')",
+              "linear-gradient(rgba(0,0,0,0.06), rgba(0,0,0,0.12)), url('/home/image_text.jpeg')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
@@ -302,17 +284,20 @@ export default function Home() {
         <section className="w-full">
           <div className="grid grid-cols-1 md:grid-cols-2">
             <img
-              src="/images/mid4.png"
+              src="/home/side.jpeg"
               alt="Mountain valley with wildflowers"
-              className="h-full min-h-[260px] w-full object-cover md:min-h-[320px] lg:min-h-[360px]"
+              className="h-[320px] w-full object-cover md:h-[640px]"
             />
-            <div className="flex min-h-[280px] flex-col items-center justify-center bg-[#ebddd1] px-8 py-12 text-center sm:px-10 sm:py-14 md:min-h-[320px] md:py-16 lg:min-h-[360px]">
-              <h2 className="max-w-[22ch] font-serif text-2xl font-normal leading-snug text-[#1a3030] sm:text-3xl md:text-[32px]">
+            <div className="flex min-h-[320px] flex-col items-start justify-center bg-[#ebddd1] px-8 py-12 text-left sm:px-10 sm:py-14 md:min-h-[640px] md:px-14 md:py-16 lg:px-16">
+              <h2 className="w-full max-w-[526px] font-['Montserrat',sans-serif] text-[28px] font-medium leading-[1.62] tracking-normal text-[#1B3638]">
                 Unveiling the symphony of Nature
               </h2>
-              <p className="mt-5 max-w-md font-['Montserrat',sans-serif] text-sm font-medium leading-[1.62] tracking-normal text-[#3d4a42]">
-                Discover botanicals gathered with care and formulated to respect your skin and the
-                landscapes they come from — a quiet rhythm of purity, potency, and place.
+              <p className="mt-5 w-full max-w-[640px] font-['Montserrat',sans-serif] text-xs font-normal leading-[1.62] tracking-normal text-[#41534D]">
+                Organic Works understands that true beauty should not come at the expense of the environment.
+                Every product is crafted with love and care, minimizing it&apos;s carbon footprint. The true
+                source of strength for the brand, is the earth itself, using ingredients sourced from Organic
+                farming. With 99% of it&apos;s plant based ingredients derived from sustainable sources, the brand
+                is firmly rooted in Nature&apos;s abundance.
               </p>
               <a
                 href="#"
@@ -323,32 +308,33 @@ export default function Home() {
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2">
-            <div className="order-2 flex min-h-[280px] flex-col items-center justify-center bg-[#687C69] px-8 py-12 text-center sm:px-10 sm:py-14 md:order-1 md:min-h-[320px] md:py-16 lg:min-h-[360px]">
-              <h2 className="max-w-[24ch] font-serif text-2xl font-normal leading-snug text-[#f5f0e8] sm:text-3xl md:text-[32px]">
+            <div className="order-2 flex min-h-[320px] flex-col items-center justify-center bg-[#687C69] px-8 py-12 text-left sm:px-10 sm:py-14 md:order-1 md:min-h-[640px] md:py-16">
+              <h2 className="w-full max-w-[526px] font-['Montserrat',sans-serif] text-[28px] font-medium leading-[1.62] tracking-normal text-[#D6BC97]">
                 Dive into the world of Organic Works
               </h2>
-              <p className="mt-5 max-w-md font-['Montserrat',sans-serif] text-sm font-medium leading-[1.62] tracking-normal text-white/90">
-                From transparent sourcing to thoughtful craft, explore how every product is rooted in
-                organic integrity — made for everyday rituals you can trust.
+              <p className="mt-5 w-full max-w-[526px] font-['Montserrat',sans-serif] text-xs font-normal leading-[1.62] tracking-normal text-[#FDF3EC]">
+                Elevate your senses with the purity of our secret ingredients, lovingly nurtured by the
+                Scottish landscape. Our commitment to authenticity goes beyond the surface - it&apos;s a dedication
+                to preserving the very essence of the land, ensuring that each fragrance, feel and texture
+                orchestrated into the Organic works range, is a genuine connection to the heart of Scotland.
               </p>
               <a
                 href="#"
-                className="mt-8 font-['Montserrat',sans-serif] text-sm font-medium text-[#f5f0e8] underline decoration-white/35 underline-offset-4 transition-colors hover:decoration-white"
+                className="mt-8 font-['Montserrat',sans-serif] text-base font-medium leading-[1.62] tracking-normal text-[#EBDDD1] underline decoration-[#EBDDD1]/35 underline-offset-4 transition-colors hover:decoration-[#EBDDD1]"
               >
                 Learn More
               </a>
             </div>
             <img
-              src="/images/mid5.png"
+              src="/home/rightside.jpeg"
               alt="Two people relaxing in a sunlit meadow"
-              className="order-1 h-full min-h-[260px] w-full object-cover md:order-2 md:min-h-[320px] lg:min-h-[360px]"
+              className="order-1 h-[320px] w-full object-cover md:order-2 md:h-[640px]"
             />
           </div>
         </section>
 
-        <section className="bg-[#f7efe3] pt-0 pb-20">
+        <section className="bg-[#f7efe3] pt-20 pb-20">
           <div className="flex flex-col items-center">
-            <div className="w-8 h-20 bg-[#d9d9d9] mb-4"></div>
             <h3 className="font-medium text-[#1a3636] text-lg sm:text-[22px] mb-10">
               @selfsoul_healwithnature
             </h3>
