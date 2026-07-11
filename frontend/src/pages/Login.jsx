@@ -5,6 +5,7 @@ import BrandStoryBanner from '../components/BrandStoryBanner';
 import Newsletter from '../components/Newsletter';
 
 const AUTH_USER_STORAGE_KEY = 'selfSoulUser';
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
 
 function saveAuthUser(user) {
   localStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(user));
@@ -26,7 +27,7 @@ export default function Login() {
   const [detailsErrors, setDetailsErrors] = useState({ name: false, mobile: false });
 
   const callApi = async (url, options) => {
-    const response = await fetch(url, {
+    const response = await fetch(`${API_BASE_URL}${url}`, {
       headers: { 'Content-Type': 'application/json' },
       ...options,
     });
