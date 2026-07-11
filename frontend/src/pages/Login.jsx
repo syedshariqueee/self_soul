@@ -5,7 +5,9 @@ import BrandStoryBanner from '../components/BrandStoryBanner';
 import Newsletter from '../components/Newsletter';
 
 const AUTH_USER_STORAGE_KEY = 'selfSoulUser';
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
+const API_BASE_URL = (
+  import.meta.env.VITE_API_BASE_URL || 'https://self-soul-backend.onrender.com'
+).replace(/\/$/, '');
 
 function saveAuthUser(user) {
   localStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(user));
@@ -31,7 +33,26 @@ export default function Login() {
       headers: { 'Content-Type': 'application/json' },
       ...options,
     });
-    const data = await response.json();
+
+    const contentType = response.headers.get('content-type') || '';
+    const raw = await response.text();
+
+    let data;
+    try {
+      data = contentType.includes('application/json') || raw.trim().startsWith('{')
+        ? JSON.parse(raw)
+        : null;
+    } catch {
+      data = null;
+    }
+
+    if (!data) {
+      throw new Error(
+        response.ok
+          ? 'Invalid response from server'
+          : `Server error (${response.status}). Please try again.`
+      );
+    }
 
     if (!response.ok || !data.ok) {
       throw new Error(data.error || 'Something went wrong');
