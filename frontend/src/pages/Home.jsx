@@ -358,7 +358,7 @@ export default function Home() {
 
           <div className="border-y border-[#1a3636]/20 w-full overflow-hidden whitespace-nowrap py-4">
             <div className="inline-block animate-[marquee_20s_linear_infinite]">
-              <span className="text-[#45504c] text-[15px] font-medium mx-8">100% Organic Ingredients</span>
+              <span className="text-[#45504c] text-[15px] font-medium mx-8">100% Organic Ingredient</span>
               <span className="text-[#45504c] text-[15px] font-medium mx-8">100% Clinically Tested</span>
               <span className="text-[#45504c] text-[15px] font-medium mx-8">Suitable For All Skin Types</span>
               <span className="text-[#45504c] text-[15px] font-medium mx-8">100% Vegan</span>
