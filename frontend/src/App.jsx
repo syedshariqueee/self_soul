@@ -12,6 +12,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsConditions from './pages/TermsConditions';
 import ReturnsPolicy from './pages/ReturnsPolicy';
 import DeliveryInformation from './pages/DeliveryInformation';
+import Bath from './pages/Bath';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/our-store" element={<OurStore />} />
         <Route path="/ingredients" element={<Ingredients />} />
         <Route path="/clinically-tested" element={<ClinicallyTested />} />
+        <Route path="/bath" element={<Bath />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/faqs" element={<Faqs />} />

@@ -29,9 +29,15 @@ export default function Footer() {
             <ul className="mt-4 space-y-2.5 text-sm font-normal">
               {["Bath", "Body", "Face", "Best Seller", "Value Sets", "Gift"].map((item) => (
                 <li key={item}>
-                  <a href="#" className="hover:underline">
-                    {item}
-                  </a>
+                  {item === 'Bath' ? (
+                    <Link to="/bath" className="hover:underline">
+                      {item}
+                    </Link>
+                  ) : (
+                    <a href="#" className="hover:underline">
+                      {item}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>

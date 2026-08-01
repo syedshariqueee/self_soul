@@ -18,12 +18,12 @@ const ingredientTags = [
 ];
 
 const bestsellerImages = [
-  { src: "/images/bestseller/best1.jpg", alt: "Bestseller product 1" },
-  { src: "/images/bestseller/best6.jpg", alt: "Bestseller product 6" },
-  { src: "/images/bestseller/best5.png", alt: "Bestseller product 5" },
-  { src: "/images/bestseller/best4.jpg", alt: "Bestseller product 4" },
-  { src: "/images/bestseller/best3.png", alt: "Bestseller product 3" },
-  { src: "/images/bestseller/best2.png", alt: "Bestseller product 2" },
+  { src: "/bathpro/Artboard%201.png", alt: "Bestseller product 1" },
+  { src: "/bathpro/Artboard%202.png", alt: "Bestseller product 2" },
+  { src: "/bathpro/Artboard%203.png", alt: "Bestseller product 3" },
+  { src: "/bathpro/Artboard%204.png", alt: "Bestseller product 4" },
+  { src: "/bathpro/Artboard%205.png", alt: "Bestseller product 5" },
+  { src: "/bathpro/Artboard%206.png", alt: "Bestseller product 6" },
 ];
 
 export default function Home() {
@@ -94,9 +94,7 @@ export default function Home() {
               Clinically approved, clean beauty
             </h2>
             <p className="mt-3 max-w-[920px] font-['Montserrat',sans-serif] text-[11px] leading-[1.65] text-white/95 sm:text-xs sm:leading-relaxed md:text-[13px] md:leading-7">
-              Organic Works is a multi-award-winning beauty brand that promises clean beauty without
-              compromise - Driven by passion for making natural and organic products that are genuinely
-              effective, kind to the skin and manufactured sustainably.
+            Expertly formulated and clinically tested for all skin types, our products deliver a gentle yet indulgent experience that supports healthy, balanced skin. 
             </p>
           </div>
         </section>
@@ -308,7 +306,7 @@ export default function Home() {
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2">
-            <div className="order-2 flex min-h-[320px] flex-col items-center justify-center bg-[#687C69] px-8 py-12 text-left sm:px-10 sm:py-14 md:order-1 md:min-h-[640px] md:py-16">
+            <div className="order-2 flex min-h-[320px] flex-col items-center justify-center bg-[#1A1F1C] px-8 py-12 text-left sm:px-10 sm:py-14 md:order-1 md:min-h-[640px] md:py-16">
               <h2 className="w-full max-w-[526px] font-['Montserrat',sans-serif] text-[28px] font-medium leading-[1.62] tracking-normal text-[#D6BC97]">
                 Dive into the world of Organic Works
               </h2>
@@ -320,7 +318,7 @@ export default function Home() {
               </p>
               <a
                 href="#"
-                className="mt-8 font-['Montserrat',sans-serif] text-base font-medium leading-[1.62] tracking-normal text-[#EBDDD1] underline decoration-[#EBDDD1]/35 underline-offset-4 transition-colors hover:decoration-[#EBDDD1]"
+                className="mt-8 font-['Montserrat',sans-serif] text-base font-medium leading-[1.62] tracking-normal !text-white underline decoration-white/35 underline-offset-4 transition-colors hover:decoration-white"
               >
                 Learn More
               </a>
@@ -335,8 +333,15 @@ export default function Home() {
 
         <section className="bg-[#f7efe3] pt-20 pb-20">
           <div className="flex flex-col items-center">
-            <h3 className="font-medium text-[#1a3636] text-lg sm:text-[22px] mb-10">
-              @selfsoul_healwithnature
+            <h3 className="mb-10 font-medium text-[#1a3636] text-lg sm:text-[22px]">
+              <a
+                href="https://www.instagram.com/selfsoul_sanctuary?igsh=MXdjZ2N1ejh5c3R2Zg=="
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline"
+              >
+                @selfsoul_sanctuary
+              </a>
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-5 px-6 w-full max-w-[1100px] mx-auto mb-10">
               {[1, 2, 3, 4].map((num) => (
@@ -367,7 +372,7 @@ export default function Home() {
           </div>
         </section>
 
-        <BrandStoryBanner />
+        <BrandStoryBanner imageSrc="/footer-banner/homebanner.png" />
         <Newsletter />
         <Footer />
       </div>

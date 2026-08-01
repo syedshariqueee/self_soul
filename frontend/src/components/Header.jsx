@@ -15,6 +15,7 @@ const NAV_ITEMS = [
 
 function navTarget(item) {
   if (item === 'Home') return '/';
+  if (item === 'Bath') return '/bath';
   if (item === 'Our Heritage') return '/our-heritage';
   if (item === 'Contact Us') return '/contact-us';
   return '#';
@@ -115,7 +116,7 @@ export default function Header() {
                       ].map((cat, idx) => (
                         <Link
                           key={cat}
-                          to="#"
+                          to={idx === 0 ? "/bath" : "#"}
                           className={`text-[10px] font-medium tracking-widest transition-colors ${
                             idx === 0
                               ? "text-[#5f6a62]"
