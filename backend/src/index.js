@@ -22,7 +22,7 @@ const port = Number(process.env.PORT || 5000);
 
 const allowedOrigins = (
   process.env.CLIENT_ORIGIN ||
-  'https://self-soul-fb6x.vercel.app,https://blue-opossum-562849.hostingersite.com,http://localhost:5173,http://localhost:5174'
+  'https://self-soul-fb6x.vercel.app,https://blue-opossum-562849.hostingersite.com,https://mediumblue-curlew-218317.hostingersite.com,http://localhost:5173,http://localhost:5174'
 )
   .split(',')
   .map((origin) => origin.trim())

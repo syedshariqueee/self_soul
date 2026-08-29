@@ -1,7 +1,7 @@
 export const API_BASE_URL = (
   import.meta.env.DEV
     ? ''
-    : import.meta.env.VITE_API_BASE_URL || 'https://self-soul-backend.onrender.com'
+    : import.meta.env.VITE_API_BASE_URL || 'https://mediumblue-curlew-218317.hostingersite.com'
 ).replace(/\/$/, '');
 
 export async function apiRequest(path, options = {}) {
