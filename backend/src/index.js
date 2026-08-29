@@ -22,21 +22,24 @@ const port = Number(process.env.PORT || 5000);
 
 const allowedOrigins = (
   process.env.CLIENT_ORIGIN ||
-  'https://self-soul-fb6x.vercel.app,http://localhost:5173,http://localhost:5174'
+  'https://self-soul-fb6x.vercel.app,https://blue-opossum-562849.hostingersite.com,http://localhost:5173,http://localhost:5174'
 )
   .split(',')
   .map((origin) => origin.trim())
   .filter(Boolean);
 
+function isAllowedOrigin(origin) {
+  if (!origin) return true;
+  if (allowedOrigins.includes(origin)) return true;
+  if (/^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin)) return true;
+  if (/^https:\/\/[a-z0-9-]+\.hostingersite\.com$/i.test(origin)) return true;
+  return false;
+}
+
 app.use(
   cors({
     origin(origin, callback) {
-      const isLocal = Boolean(origin && /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin));
-      if (!origin || allowedOrigins.includes(origin) || isLocal) {
-        callback(null, true);
-        return;
-      }
-      callback(null, false);
+      callback(null, isAllowedOrigin(origin));
     },
   })
 );
@@ -74,18 +77,20 @@ app.post('/api/auth/request-otp', async (req, res) => {
       [email, otpCode, expiresAt]
     );
 
+    console.log(`OTP for ${email}: ${otpCode}`);
     res.status(201).json({
       ok: true,
       message: 'OTP created',
-      devOtp: process.env.NODE_ENV === 'production' ? undefined : otpCode,
+      devOtp: process.env.NODE_ENV === 'production' && process.env.EXPOSE_OTP !== 'true' ? undefined : otpCode,
     });
   } catch (error) {
     if (isDbUnreachable(error)) {
       saveMemoryOtp(email, otpCode, expiresAt);
+      console.log(`OTP for ${email}: ${otpCode}`);
       return res.status(201).json({
         ok: true,
         message: 'OTP created',
-        devOtp: otpCode,
+        devOtp: process.env.EXPOSE_OTP === 'false' ? undefined : otpCode,
       });
     }
     res.status(500).json({
@@ -252,8 +257,8 @@ app.put('/api/account/wishlist', async (req, res) => {
   }
 });
 
-const server = app.listen(port, () => {
-  console.log(`API server running on http://localhost:${port}`);
+const server = app.listen(port, '0.0.0.0', () => {
+  console.log(`API server running on port ${port}`);
 });
 
 ensureUserListsTable().catch((error) => {
