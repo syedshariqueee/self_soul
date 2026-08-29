@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 function StarRating({ rating = 5 }) {
   return (
     <div className="mt-2 flex items-center gap-0.5" aria-label={`${rating} out of 5 stars`}>
@@ -24,8 +26,9 @@ export default function ProductCard({
   price,
   href = '#',
 }) {
-  return (
-    <a href={href} className="group flex w-full max-w-[303px] flex-col text-left">
+  const className = 'group flex w-full max-w-[303px] flex-col text-left';
+  const inner = (
+    <>
       <div className="relative aspect-[303/364] w-full overflow-hidden bg-[#e8e4df]">
         {badge ? (
           <span className="absolute left-3 top-3 z-10 rounded-full bg-[#f7efe3] px-2.5 py-1 font-['Montserrat',sans-serif] text-[10px] font-medium tracking-wide text-[#1a3636] sm:text-[11px]">
@@ -45,6 +48,20 @@ export default function ProductCard({
       <div className="mt-2 font-['Montserrat',sans-serif] text-sm">
         <span className="font-medium text-[#1a3636]">₹ {price}</span>
       </div>
+    </>
+  );
+
+  if (href && href !== '#') {
+    return (
+      <Link to={href} className={className}>
+        {inner}
+      </Link>
+    );
+  }
+
+  return (
+    <a href={href} className={className}>
+      {inner}
     </a>
   );
 }

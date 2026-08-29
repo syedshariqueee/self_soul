@@ -1,19 +1,16 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import BrandStoryBanner from '../components/BrandStoryBanner';
 import Newsletter from '../components/Newsletter';
-
-const AUTH_USER_STORAGE_KEY = 'selfSoulUser';
-const API_BASE_URL = (
-  import.meta.env.VITE_API_BASE_URL || 'https://self-soul-backend.onrender.com'
-).replace(/\/$/, '');
-
-function saveAuthUser(user) {
-  localStorage.setItem(AUTH_USER_STORAGE_KEY, JSON.stringify(user));
-}
+import { readAuthUser, saveAuthUser, safeNextPath } from '../utils/auth';
+import { apiRequest } from '../utils/api';
 
 export default function Login() {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const nextPath = safeNextPath(searchParams.get('next'));
   const [step, setStep] = useState('login'); // 'login' | 'otp' | 'details'
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
@@ -28,38 +25,11 @@ export default function Login() {
   const [mobile, setMobile] = useState('');
   const [detailsErrors, setDetailsErrors] = useState({ name: false, mobile: false });
 
-  const callApi = async (url, options) => {
-    const response = await fetch(`${API_BASE_URL}${url}`, {
-      headers: { 'Content-Type': 'application/json' },
-      ...options,
-    });
-
-    const contentType = response.headers.get('content-type') || '';
-    const raw = await response.text();
-
-    let data;
-    try {
-      data = contentType.includes('application/json') || raw.trim().startsWith('{')
-        ? JSON.parse(raw)
-        : null;
-    } catch {
-      data = null;
+  useEffect(() => {
+    if (readAuthUser()) {
+      navigate(nextPath, { replace: true });
     }
-
-    if (!data) {
-      throw new Error(
-        response.ok
-          ? 'Invalid response from server'
-          : `Server error (${response.status}). Please try again.`
-      );
-    }
-
-    if (!response.ok || !data.ok) {
-      throw new Error(data.error || 'Something went wrong');
-    }
-
-    return data;
-  };
+  }, [navigate, nextPath]);
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
@@ -68,7 +38,7 @@ export default function Login() {
       setMessage('');
       setDevOtp('');
       try {
-        const data = await callApi('/api/auth/request-otp', {
+        const data = await apiRequest('/api/auth/request-otp', {
           method: 'POST',
           body: JSON.stringify({ email }),
         });
@@ -97,7 +67,7 @@ export default function Login() {
       setMessage('');
       setDevOtp('');
       try {
-        const data = await callApi('/api/auth/request-otp', {
+        const data = await apiRequest('/api/auth/request-otp', {
           method: 'POST',
           body: JSON.stringify({ email }),
         });
@@ -164,7 +134,7 @@ export default function Login() {
     setIsSubmitting(true);
     setMessage('');
     try {
-      const data = await callApi('/api/auth/verify-otp', {
+      const data = await apiRequest('/api/auth/verify-otp', {
         method: 'POST',
         body: JSON.stringify({ email, otp: enteredOtp }),
       });
@@ -176,8 +146,7 @@ export default function Login() {
         setStep('details');
       } else {
         saveAuthUser(data.user);
-        alert('Login successful!');
-        window.location.href = '/';
+        navigate(nextPath, { replace: true });
       }
     } catch (error) {
       setOtpError(true);
@@ -207,14 +176,13 @@ export default function Login() {
       setIsSubmitting(true);
       setMessage('');
       try {
-        const data = await callApi('/api/auth/profile', {
+        const data = await apiRequest('/api/auth/profile', {
           method: 'PUT',
           body: JSON.stringify({ email, fullName: name, mobile }),
         });
 
         saveAuthUser(data.user);
-        alert('Account details updated successfully!');
-        window.location.href = '/';
+        navigate(nextPath, { replace: true });
       } catch (error) {
         setMessage(error.message);
       } finally {

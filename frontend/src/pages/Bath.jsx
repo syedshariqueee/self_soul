@@ -1,68 +1,12 @@
 import { useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Newsletter from '../components/Newsletter';
 import HeritageVideoSection from '../components/HeritageVideoSection';
 import BrandStoryBanner from '../components/BrandStoryBanner';
 import ProductCard from '../components/ProductCard';
-
-const BATH_IMAGE_NUMBERS = [
-  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 34,
-];
-
-const bathImage = (n) => `/bathpro/Artboard%20${n}.png`;
-
-const PRODUCT_TITLES = [
-  'Lavender Soap',
-  'Eucalyptus Soap',
-  'Coffee & Vanilla Soap',
-  'Jasmine & Mogra Soap',
-  'Rose Bath Salt',
-  'Chamomile Bath Soak',
-  'Citrus Bath Oil',
-  'Herbal Bath Scrub',
-  'Mint Bath Fizz',
-  'Sandalwood Soap',
-  'Calendula Bath Powder',
-  'Tea Tree Soap',
-  'Lemongrass Soap',
-  'Neem & Tulsi Soap',
-  'Oatmeal Honey Soap',
-  'Patchouli Bath Salt',
-  'Ylang Ylang Soak',
-  'Cedarwood Bath Oil',
-  'Hibiscus Bath Scrub',
-  'Peppermint Bath Fizz',
-  'Frankincense Soap',
-  'Aloe Vera Soap',
-  'Turmeric Glow Soap',
-  'Vetiver Bath Salt',
-  'Bergamot Bath Oil',
-  'Geranium Bath Soak',
-  'Coconut Milk Soap',
-  'Orange Blossom Soap',
-  'Clary Sage Scrub',
-  'Rosemary Bath Powder',
-  'Black Seed Soap',
-  'Wild Rose Soap',
-  'Forest Bath Soak',
-];
-
-const BADGES = ["People's Fav", 'Award Winner', null, "People's Fav", 'Award Winner', null];
-
-const BATH_PRODUCTS = BATH_IMAGE_NUMBERS.map((num, index) => {
-  const price = [349, 379, 399, 429, 449, 499, 549, 699][index % 8];
-
-  return {
-    id: index + 1,
-    title: PRODUCT_TITLES[index] || `Bath Product ${index + 1}`,
-    badge: BADGES[index % BADGES.length],
-    price,
-    rating: index % 5 === 0 ? 4 : 5,
-    available: index % 11 !== 6,
-    image: bathImage(num),
-  };
-});
+import { BATH_PRODUCTS, getBathCategoryFilter } from '../data/products';
 
 const NATURAL_ICONS = [
   {
@@ -123,12 +67,18 @@ const selectClass =
   "appearance-none bg-transparent border-0 border-b border-[#1a3636]/30 pr-6 py-1 font-['Montserrat',sans-serif] text-sm text-[#1a3636] focus:outline-none cursor-pointer";
 
 export default function Bath() {
+  const [searchParams] = useSearchParams();
   const [availability, setAvailability] = useState('all');
   const [priceRange, setPriceRange] = useState('all');
   const [sortBy, setSortBy] = useState('best-selling');
+  const categoryFilter = getBathCategoryFilter(searchParams.get('category'));
 
   const products = useMemo(() => {
     let list = [...BATH_PRODUCTS];
+
+    if (categoryFilter.value) {
+      list = list.filter((p) => p.category === categoryFilter.value);
+    }
 
     if (availability === 'in-stock') {
       list = list.filter((p) => p.available);
@@ -136,12 +86,12 @@ export default function Bath() {
       list = list.filter((p) => !p.available);
     }
 
-    if (priceRange === 'under-400') {
-      list = list.filter((p) => p.price < 400);
-    } else if (priceRange === '400-500') {
-      list = list.filter((p) => p.price >= 400 && p.price <= 500);
-    } else if (priceRange === 'over-500') {
-      list = list.filter((p) => p.price > 500);
+    if (priceRange === 'under-250') {
+      list = list.filter((p) => p.price < 250);
+    } else if (priceRange === '250-300') {
+      list = list.filter((p) => p.price >= 250 && p.price <= 300);
+    } else if (priceRange === 'over-300') {
+      list = list.filter((p) => p.price > 300);
     }
 
     if (sortBy === 'price-low') {
@@ -153,7 +103,7 @@ export default function Bath() {
     }
 
     return list;
-  }, [availability, priceRange, sortBy]);
+  }, [availability, priceRange, sortBy, categoryFilter.value]);
 
   return (
     <main className="overflow-x-hidden bg-white text-[#203229]">
@@ -216,9 +166,9 @@ export default function Bath() {
                     aria-label="Filter by price"
                   >
                     <option value="all">Price</option>
-                    <option value="under-400">Under ₹400</option>
-                    <option value="400-500">₹400 – ₹500</option>
-                    <option value="over-500">Over ₹500</option>
+                    <option value="under-250">Under ₹250</option>
+                    <option value="250-300">₹250 – ₹300</option>
+                    <option value="over-300">Over ₹300</option>
                   </select>
                   <ChevronDown />
                 </label>
@@ -257,6 +207,7 @@ export default function Bath() {
                   title={product.title}
                   rating={product.rating}
                   price={product.price}
+                  href={`/bath/${product.slug}`}
                 />
               ))}
             </div>

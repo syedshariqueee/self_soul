@@ -1,7 +1,9 @@
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Newsletter from '../components/Newsletter';
 import BrandStoryBanner from '../components/BrandStoryBanner';
+import { BESTSELLERS } from '../data/products';
 
 const bathRituals = [
   { title: "Relaxing", img: "/home/relaxing.jpeg" },
@@ -15,15 +17,6 @@ const ingredientTags = [
   "Suitable for all skin types",
   "100% vegan",
   "100% curated",
-];
-
-const bestsellerImages = [
-  { src: "/bathpro/Artboard%201.png", alt: "Bestseller product 1" },
-  { src: "/bathpro/Artboard%202.png", alt: "Bestseller product 2" },
-  { src: "/bathpro/Artboard%203.png", alt: "Bestseller product 3" },
-  { src: "/bathpro/Artboard%204.png", alt: "Bestseller product 4" },
-  { src: "/bathpro/Artboard%205.png", alt: "Bestseller product 5" },
-  { src: "/bathpro/Artboard%206.png", alt: "Bestseller product 6" },
 ];
 
 export default function Home() {
@@ -100,41 +93,40 @@ export default function Home() {
         </section>
 
         <section className="bg-white px-4 py-8 sm:px-6 sm:py-10 md:px-10 md:py-12 lg:px-14">
-          <div className="mx-auto w-full max-w-[1200px] bg-white p-3 sm:p-4">
-            <div className="grid w-full grid-cols-1 gap-3 md:grid-cols-[minmax(260px,0.8fr)_minmax(0,1.2fr)] md:items-stretch md:gap-3">
-              <div className="flex min-h-[280px] w-full flex-col items-start justify-center bg-[#414d47] px-8 py-10 font-['Montserrat',sans-serif] text-white sm:px-10 sm:py-12 md:h-full md:min-h-0 md:px-9 md:py-10 lg:px-10 lg:py-11">
-                  <h2 className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl">Best Sellers</h2>
-                  <p className="mt-3 text-lg font-medium leading-snug text-white sm:text-xl">Everlasting Favourites</p>
-                  <p className="mt-4 max-w-[22ch] text-xs leading-relaxed text-white/85 sm:text-sm">
-                    <span className="block">our crowd-pleasers with</span>
-                    <span className="block">guaranteed</span>
-                  </p>
-                  <button
-                    type="button"
-                    className="mt-8 w-fit rounded-full bg-[#5c6e62] px-8 py-2.5 text-sm font-medium text-white shadow-sm transition-opacity hover:opacity-90"
-                  >
-                    Explore
-                  </button>
-                </div>
-                <div className="min-h-0 w-full md:h-full md:min-h-0">
-                  <div className="grid h-auto min-h-[200px] w-full grid-cols-2 gap-3 bg-white md:h-full md:min-h-0 md:grid-cols-3">
-                    {bestsellerImages.map((item) => (
-                      <div
-                        key={item.src}
-                        className="relative aspect-square min-h-0 min-w-0 overflow-hidden bg-neutral-100"
-                      >
-                        <img
-                          src={item.src}
-                          alt={item.alt}
-                          width={240}
-                          height={240}
-                          className="absolute inset-0 h-full w-full object-cover"
-                          loading="lazy"
-                        />
-                      </div>
-                    ))}
-                </div>
+          <div className="mx-auto grid w-full max-w-[1200px] grid-cols-1 items-stretch gap-3 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+            <div className="flex min-h-[280px] items-center bg-[#41534D] px-8 py-12 font-['Montserrat',sans-serif] text-white sm:px-10 md:min-h-0 md:px-12 lg:px-14">
+              <div className="flex flex-col items-start justify-center">
+                <h2 className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl">Best Sellers</h2>
+                <p className="mt-3 text-lg font-medium leading-snug text-white sm:text-xl">Everlasting Favourites</p>
+                <p className="mt-4 max-w-[22ch] text-xs leading-relaxed text-white/85 sm:text-sm">
+                  <span className="block">our crowd-pleasers with</span>
+                  <span className="block">guaranteed</span>
+                </p>
+                <Link
+                  to="/bath"
+                  className="mt-8 w-fit rounded-full border border-white/70 bg-[#5c6e62] px-8 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
+                >
+                  Explore
+                </Link>
               </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3 md:h-full md:grid-cols-3 md:grid-rows-2">
+              {BESTSELLERS.map((item) => (
+                <Link
+                  key={item.slug}
+                  to={`/bath/${item.slug}`}
+                  className="relative min-h-0 min-w-0 overflow-hidden bg-neutral-100 aspect-square"
+                >
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    width={240}
+                    height={240}
+                    className="absolute inset-0 h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                </Link>
+              ))}
             </div>
           </div>
         </section>

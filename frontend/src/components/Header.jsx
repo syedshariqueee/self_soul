@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
+import { AUTH_EVENT, clearAuthUser, readAuthUser } from '../utils/auth';
+import { WISHLIST_EVENT, readWishlistIds } from '../utils/wishlist';
+import { BATH_NAV_CATEGORIES, BATH_PRODUCTS } from '../data/products';
+
+const BATH_MENU_PRODUCTS = BATH_PRODUCTS.slice(0, 2);
 
 const NAV_ITEMS = [
   'Home',
@@ -28,19 +34,10 @@ function navIsActive(pathname, item) {
   if (item === 'Our Heritage') {
     return pathname === '/our-heritage' || pathname === '/our-store';
   }
+  if (item === 'Bath') return pathname === '/bath' || pathname.startsWith('/bath/');
   return pathname === to;
 }
 
-const AUTH_USER_STORAGE_KEY = 'selfSoulUser';
-
-function readStoredUser() {
-  try {
-    const storedUser = localStorage.getItem(AUTH_USER_STORAGE_KEY);
-    return storedUser ? JSON.parse(storedUser) : null;
-  } catch {
-    return null;
-  }
-}
 
 function getDisplayName(user) {
   if (user?.fullName) return user.fullName.split(' ')[0];
@@ -49,16 +46,35 @@ function getDisplayName(user) {
 }
 
 export default function Header() {
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
+  const bathCategoryQuery = new URLSearchParams(search).get('category');
   const navigate = useNavigate();
+  const { itemCount, openCart } = useCart();
   const accountMenuRef = useRef(null);
-  const [user, setUser] = useState(() => readStoredUser());
+  const [user, setUser] = useState(() => readAuthUser());
   const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false);
+  const [wishlistCount, setWishlistCount] = useState(() => readWishlistIds().length);
 
   useEffect(() => {
-    setUser(readStoredUser());
+    setUser(readAuthUser());
+    setWishlistCount(readWishlistIds().length);
     setIsAccountMenuOpen(false);
   }, [pathname]);
+
+  useEffect(() => {
+    function syncAuth() {
+      setUser(readAuthUser());
+      setWishlistCount(readWishlistIds().length);
+    }
+    window.addEventListener(AUTH_EVENT, syncAuth);
+    window.addEventListener(WISHLIST_EVENT, syncAuth);
+    window.addEventListener('storage', syncAuth);
+    return () => {
+      window.removeEventListener(AUTH_EVENT, syncAuth);
+      window.removeEventListener(WISHLIST_EVENT, syncAuth);
+      window.removeEventListener('storage', syncAuth);
+    };
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -72,8 +88,9 @@ export default function Header() {
   }, []);
 
   function handleLogout() {
-    localStorage.removeItem(AUTH_USER_STORAGE_KEY);
+    clearAuthUser();
     setUser(null);
+    setWishlistCount(0);
     setIsAccountMenuOpen(false);
     navigate('/login');
   }
@@ -104,64 +121,46 @@ export default function Header() {
                   <div className="w-full cursor-default border-b border-[#eadfcd] bg-[#f7efe3] pb-12 pt-8 shadow-xl">
                     <div className="mx-auto flex max-w-5xl gap-16 px-8">
                     <div className="ml-32 flex flex-col gap-3">
-                      {[
-                        "VIEW ALL",
-                        "BATH SOAPS",
-                        "BATH SALTS",
-                        "BATH OILS",
-                        "BATH SCRUBS",
-                        "BATH FIZZ",
-                        "BATH SOAKS",
-                        "BATH POWDER",
-                      ].map((cat, idx) => (
-                        <Link
-                          key={cat}
-                          to={idx === 0 ? "/bath" : "#"}
-                          className={`text-[10px] font-medium tracking-widest transition-colors ${
-                            idx === 0
-                              ? "text-[#5f6a62]"
-                              : "text-[#8b857a] hover:text-[#2f3f36]"
-                          }`}
-                        >
-                          {cat}
-                        </Link>
-                      ))}
+                      {BATH_NAV_CATEGORIES.map((cat) => {
+                        const to = cat.query ? `/bath?category=${cat.query}` : '/bath';
+                        const isActive =
+                          pathname === '/bath' &&
+                          (bathCategoryQuery || null) === cat.query;
+                        return (
+                          <Link
+                            key={cat.label}
+                            to={to}
+                            className={`text-[10px] font-medium tracking-widest transition-colors ${
+                              isActive
+                                ? "text-[#5f6a62]"
+                                : "text-[#8b857a] hover:text-[#2f3f36]"
+                            }`}
+                          >
+                            {cat.label}
+                          </Link>
+                        );
+                      })}
                     </div>
 
                     <div className="flex gap-8">
-                      <div className="flex flex-col gap-3">
-                        <div className="overflow-hidden rounded-md shadow-sm">
-                          <img
-                            src="/images/bath1.png"
-                            alt="Summer Collection"
-                            className="h-44 w-44 object-cover transition-transform duration-500 hover:scale-105"
-                          />
+                      {BATH_MENU_PRODUCTS.map((product) => (
+                        <div key={product.id} className="flex flex-col gap-3">
+                          <Link to={`/bath/${product.slug}`} className="overflow-hidden rounded-md shadow-sm">
+                            <img
+                              src={product.image}
+                              alt={product.title}
+                              className="h-44 w-44 object-cover transition-transform duration-500 hover:scale-105"
+                            />
+                          </Link>
+                          <Link
+                            to={`/bath/${product.slug}`}
+                            className="flex items-center gap-1 text-[12px] font-semibold text-[#1c2d3a] hover:underline"
+                          >
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+                            {product.title}
+                          </Link>
                         </div>
-                        <Link
-                          to="#"
-                          className="flex items-center gap-1 text-[12px] font-semibold text-[#1c2d3a] hover:underline"
-                        >
-                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
-                          Summer Collection
-                        </Link>
-                      </div>
-
-                      <div className="flex flex-col gap-3">
-                        <div className="overflow-hidden rounded-md shadow-sm">
-                          <img
-                            src="/images/bath2.png"
-                            alt="Winter Collection"
-                            className="h-44 w-44 object-cover transition-transform duration-500 hover:scale-105"
-                          />
-                        </div>
-                        <Link
-                          to="#"
-                          className="flex items-center gap-1 text-[12px] font-semibold text-[#1c2d3a] hover:underline"
-                        >
-                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
-                          Winter Collection
-                        </Link>
-                      </div>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -374,13 +373,32 @@ export default function Header() {
           <button type="button" className="cursor-pointer transition-opacity hover:opacity-70">
             <img src="/icons/search.png" alt="Search" className="w-[18px] h-[18px] object-contain" />
           </button>
-          <button type="button" className="cursor-pointer transition-opacity hover:opacity-70">
-            <img src="/icons/heart.png" alt="Wishlist" className="w-[18px] h-[18px] object-contain" />
+          <Link
+            to="/wishlist"
+            className="relative cursor-pointer transition-opacity hover:opacity-70"
+            aria-label={`Wishlist${user && wishlistCount ? `, ${wishlistCount} items` : ''}`}
+          >
+            <img src="/icons/heart.png" alt="" className="w-[18px] h-[18px] object-contain" />
+            {user && wishlistCount > 0 ? (
+              <span className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#1a3636] px-1 text-[9px] font-semibold leading-none text-white">
+                {wishlistCount > 99 ? '99+' : wishlistCount}
+              </span>
+            ) : null}
+          </Link>
+          <button
+            type="button"
+            onClick={openCart}
+            className="relative cursor-pointer transition-opacity hover:opacity-70"
+            aria-label={`Shopping bag${user && itemCount ? `, ${itemCount} items` : ''}`}
+          >
+            <img src="/icons/shoppingbag.png" alt="" className="w-[18px] h-[18px] object-contain" />
+            {user && itemCount > 0 ? (
+              <span className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#1a3636] px-1 text-[9px] font-semibold leading-none text-white">
+                {itemCount > 99 ? '99+' : itemCount}
+              </span>
+            ) : null}
           </button>
-          <button type="button" className="cursor-pointer transition-opacity hover:opacity-70">
-            <img src="/icons/shoppingbag.png" alt="Shopping Bag" className="w-[18px] h-[18px] object-contain" />
-          </button>
-          <div ref={accountMenuRef} className="relative hidden sm:inline-flex">
+          <div ref={accountMenuRef} className="relative inline-flex">
             {user ? (
               <>
                 <button
@@ -406,7 +424,7 @@ export default function Header() {
                     <Link to="/profile" className="block px-5 py-2.5 transition-colors hover:bg-[#4b625b]">
                       Profile
                     </Link>
-                    <Link to="#" className="block px-5 py-2.5 transition-colors hover:bg-[#4b625b]">
+                    <Link to="/orders" className="block px-5 py-2.5 transition-colors hover:bg-[#4b625b]">
                       Orders
                     </Link>
                     <button
@@ -420,7 +438,10 @@ export default function Header() {
                 )}
               </>
             ) : (
-              <Link to="/login" className="cursor-pointer transition-opacity hover:opacity-70">
+              <Link
+                to={`/login?next=${encodeURIComponent(pathname === '/login' ? '/' : pathname)}`}
+                className="cursor-pointer transition-opacity hover:opacity-70"
+              >
                 <img src="/icons/account.png" alt="Account" className="w-[18px] h-[18px] object-contain" />
               </Link>
             )}

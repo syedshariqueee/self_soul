@@ -5,16 +5,7 @@ import Footer from '../components/Footer';
 import BrandStoryBanner from '../components/BrandStoryBanner';
 import Newsletter from '../components/Newsletter';
 
-const AUTH_USER_STORAGE_KEY = 'selfSoulUser';
-
-function readStoredUser() {
-  try {
-    const storedUser = localStorage.getItem(AUTH_USER_STORAGE_KEY);
-    return storedUser ? JSON.parse(storedUser) : null;
-  } catch {
-    return null;
-  }
-}
+import { AUTH_EVENT, clearAuthUser, readAuthUser } from '../utils/auth';
 
 function EditIcon() {
   return (
@@ -60,21 +51,32 @@ const joinedProfileFieldClass = "h-[60px] w-full border border-[#687C69] bg-tran
 
 export default function Profile() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(() => readStoredUser());
+  const [user, setUser] = useState(() => readAuthUser());
 
   useEffect(() => {
-    const storedUser = readStoredUser();
-    if (!storedUser) {
-      navigate('/login');
-      return;
+    function sync() {
+      const storedUser = readAuthUser();
+      if (!storedUser) {
+        navigate('/login?next=/profile');
+        return;
+      }
+      setUser(storedUser);
     }
-
-    setUser(storedUser);
+    sync();
+    window.addEventListener(AUTH_EVENT, sync);
+    return () => window.removeEventListener(AUTH_EVENT, sync);
   }, [navigate]);
 
-  const fullName = user?.fullName || 'Chirag';
-  const email = user?.email || 'Chiragillustrator@gmail.com';
-  const mobile = user?.mobile || '+91 9318406611';
+  function handleLogout() {
+    clearAuthUser();
+    navigate('/login');
+  }
+
+  if (!user) return null;
+
+  const fullName = user.fullName || '';
+  const email = user.email || '';
+  const mobile = user.mobile || '';
 
   return (
     <div className="min-h-screen bg-[#f7efe3]">
@@ -146,8 +148,12 @@ export default function Profile() {
               <input readOnly value={fullName} className={`-mt-px ${joinedProfileFieldClass}`} />
             </div>
 
-            <button type="button" className="mt-4 font-['Montserrat',sans-serif] text-[12px] text-[#1f3330] underline">
-              + add new
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="mt-10 h-11 rounded-full bg-[#1a3636] px-8 font-['Montserrat',sans-serif] text-xs font-semibold uppercase tracking-wide text-white"
+            >
+              Log out
             </button>
           </section>
         </div>
