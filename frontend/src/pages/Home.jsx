@@ -123,7 +123,7 @@ export default function Home() {
                     alt={item.title}
                     width={240}
                     height={240}
-                    className="absolute inset-0 h-full w-full object-contain"
+                    className="absolute inset-0 h-full w-full object-fill"
                     loading="lazy"
                   />
                 </Link>
