@@ -1,0 +1,16 @@
+{
+  "name": "self-soul",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "frontend"
+  ],
+  "engines": {
+    "node": ">=20.19.0"
+  },
+  "scripts": {
+    "build": "npm run build --workspace=frontend",
+    "dev": "npm run dev --workspace=frontend",
+    "preview": "npm run preview --workspace=frontend"
+  }
+}
