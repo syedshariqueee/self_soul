@@ -8,8 +8,14 @@ export default defineConfig({
     outDir: "build",
   },
   server: {
+    port: 5170,
+    strictPort: true,
     proxy: {
-      "/api": "http://localhost:5000",
+      "/api": "http://localhost:5002",
     },
+  },
+  preview: {
+    port: 5170,
+    strictPort: true,
   },
 });

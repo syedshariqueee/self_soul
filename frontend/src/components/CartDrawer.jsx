@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BATH_PRODUCTS, BESTSELLERS } from '../data/products';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../context/useCart';
+
 import { readWishlistIds } from '../utils/wishlist';
 
 function StarRating({ rating = 5 }) {

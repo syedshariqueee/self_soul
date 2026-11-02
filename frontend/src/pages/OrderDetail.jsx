@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import OrderPageLayout from '../components/order/OrderPageLayout';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../context/useCart';
+
 import { AUTH_EVENT, readAuthUser } from '../utils/auth';
 import {
   TRACKING_STEPS,

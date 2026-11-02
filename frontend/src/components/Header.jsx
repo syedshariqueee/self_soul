@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../context/useCart';
+
 import { AUTH_EVENT, clearAuthUser, readAuthUser } from '../utils/auth';
 import { WISHLIST_EVENT, readWishlistIds } from '../utils/wishlist';
-import { BATH_NAV_CATEGORIES, BATH_PRODUCTS } from '../data/products';
+import { BATH_NAV_CATEGORIES, BATH_PRODUCTS, VALUE_SET_NAV_CATEGORIES, VALUE_SET_PRODUCTS } from '../data/products';
 
 const BATH_MENU_PRODUCTS = BATH_PRODUCTS.slice(0, 2);
+const VALUE_MENU_PRODUCTS = VALUE_SET_PRODUCTS.slice(0, 2);
 
 const NAV_ITEMS = [
   'Home',
@@ -22,6 +24,7 @@ const NAV_ITEMS = [
 function navTarget(item) {
   if (item === 'Home') return '/';
   if (item === 'Bath') return '/bath';
+  if (item === 'Value Sets') return '/value-sets';
   if (item === 'Our Heritage') return '/our-heritage';
   if (item === 'Contact Us') return '/contact-us';
   return '#';
@@ -35,6 +38,7 @@ function navIsActive(pathname, item) {
     return pathname === '/our-heritage' || pathname === '/our-store';
   }
   if (item === 'Bath') return pathname === '/bath' || pathname.startsWith('/bath/');
+  if (item === 'Value Sets') return pathname === '/value-sets' || pathname.startsWith('/value-sets/');
   return pathname === to;
 }
 
@@ -47,7 +51,7 @@ function getDisplayName(user) {
 
 export default function Header() {
   const { pathname, search } = useLocation();
-  const bathCategoryQuery = new URLSearchParams(search).get('category');
+  const currentCategoryQuery = new URLSearchParams(search).get('category');
   const navigate = useNavigate();
   const { itemCount, openCart } = useCart();
   const accountMenuRef = useRef(null);
@@ -125,7 +129,7 @@ export default function Header() {
                         const to = cat.query ? `/bath?category=${cat.query}` : '/bath';
                         const isActive =
                           pathname === '/bath' &&
-                          (bathCategoryQuery || null) === cat.query;
+                          (currentCategoryQuery || null) === cat.query;
                         return (
                           <Link
                             key={cat.label}
@@ -144,20 +148,20 @@ export default function Header() {
 
                     <div className="flex gap-8">
                       {BATH_MENU_PRODUCTS.map((product) => (
-                        <div key={product.id} className="flex flex-col gap-3">
-                          <Link to={`/bath/${product.slug}`} className="overflow-hidden rounded-md shadow-sm">
+                        <div key={product.id} className="w-44 flex flex-col gap-3">
+                          <Link to={`/bath/${product.slug}`} className="block h-44 w-44 overflow-hidden rounded-md shadow-sm">
                             <img
                               src={product.image}
                               alt={product.title}
-                              className="h-44 w-44 object-cover transition-transform duration-500 hover:scale-105"
+                              className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
                             />
                           </Link>
                           <Link
                             to={`/bath/${product.slug}`}
-                            className="flex items-center gap-1 text-[12px] font-semibold text-[#1c2d3a] hover:underline"
+                            className="flex items-start gap-1 text-[12px] font-semibold text-[#1c2d3a] hover:underline"
                           >
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
-                            {product.title}
+                            <svg className="mt-0.5 shrink-0" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+                            <span>{product.title}</span>
                           </Link>
                         </div>
                       ))}
@@ -241,59 +245,46 @@ export default function Header() {
                   <div className="w-full cursor-default border-b border-[#eadfcd] bg-[#f7efe3] pb-12 pt-8 shadow-xl">
                     <div className="mx-auto flex max-w-5xl gap-16 px-8">
                       <div className="ml-32 flex flex-col gap-3">
-                        {[
-                          "VIEW ALL",
-                          "BATH",
-                          "FACE",
-                        ].map((cat, idx) => (
-                          <Link
-                            key={cat}
-                            to="#"
-                            className={`text-[10px] font-medium tracking-widest transition-colors ${
-                              idx === 0
-                                ? "text-[#5f6a62]"
-                                : "text-[#8b857a] hover:text-[#2f3f36]"
-                            }`}
-                          >
-                            {cat}
-                          </Link>
-                        ))}
+                        {VALUE_SET_NAV_CATEGORIES.map((cat) => {
+                          const to = cat.query ? `/value-sets?category=${cat.query}` : '/value-sets';
+                          const isActive =
+                            pathname === '/value-sets' &&
+                            (currentCategoryQuery || null) === cat.query;
+                          return (
+                            <Link
+                              key={cat.label}
+                              to={to}
+                              className={`text-[10px] font-medium tracking-widest transition-colors ${
+                                isActive
+                                  ? "text-[#5f6a62]"
+                                  : "text-[#8b857a] hover:text-[#2f3f36]"
+                              }`}
+                            >
+                              {cat.label}
+                            </Link>
+                          );
+                        })}
                       </div>
 
                       <div className="flex gap-8">
-                        <div className="flex flex-col gap-3">
-                          <div className="overflow-hidden rounded-md shadow-sm bg-[#f2c4b4] flex items-center justify-center">
-                            <img
-                              src="/value/value1.png"
-                              alt="Super Salt Combo"
-                              className="h-44 w-44 object-contain transition-transform duration-500 hover:scale-105"
-                            />
+                        {VALUE_MENU_PRODUCTS.map((product) => (
+                          <div key={product.id} className="w-44 flex flex-col gap-3">
+                            <Link to={`/value-sets/${product.slug}`} className="block h-44 w-44 overflow-hidden rounded-md shadow-sm">
+                              <img
+                                src={product.image}
+                                alt={product.title}
+                                className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                              />
+                            </Link>
+                            <Link
+                              to={`/value-sets/${product.slug}`}
+                              className="flex items-start gap-1 text-[12px] font-semibold text-[#1c2d3a] hover:underline"
+                            >
+                              <svg className="mt-0.5 shrink-0" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+                              <span>{product.title}</span>
+                            </Link>
                           </div>
-                          <Link
-                            to="#"
-                            className="flex items-center gap-1 text-[12px] font-semibold text-[#1c2d3a] hover:underline"
-                          >
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
-                            Super Salt Combo
-                          </Link>
-                        </div>
-
-                        <div className="flex flex-col gap-3">
-                          <div className="overflow-hidden rounded-md shadow-sm bg-[#ecd9cc] flex items-center justify-center">
-                            <img
-                              src="/value/value2.png"
-                              alt="Value Combo Set"
-                              className="h-44 w-44 object-contain transition-transform duration-500 hover:scale-105"
-                            />
-                          </div>
-                          <Link
-                            to="#"
-                            className="flex items-center gap-1 text-[12px] font-semibold text-[#1c2d3a] hover:underline"
-                          >
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
-                            Value Combo Set
-                          </Link>
-                        </div>
+                        ))}
                       </div>
                     </div>
                   </div>

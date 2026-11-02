@@ -5,7 +5,8 @@ import Footer from '../components/Footer';
 import Newsletter from '../components/Newsletter';
 import BrandStoryBanner from '../components/BrandStoryBanner';
 import { BATH_PRODUCTS } from '../data/products';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../context/useCart';
+
 import { AUTH_EVENT, readAuthUser } from '../utils/auth';
 import { WISHLIST_EVENT, readWishlistIds, removeWishlistId } from '../utils/wishlist';
 

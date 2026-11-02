@@ -63,7 +63,20 @@ function hydrateItems(items) {
     .filter((item) => item.id && item.qty > 0);
 }
 
-const CartContext = createContext(null);
+// CartContext is kept here so CartProvider and useCart share the same context object.
+// NOTE: Vite Fast Refresh warns when a .jsx file mixes component exports (CartProvider)
+// with non-component exports (useCart). The warning is cosmetic during HMR – it does not
+// affect production builds. The context still works correctly. If you want to silence the
+// warning entirely, import useCart from './useCart.js' instead (which re-exports from here).
+export const CartContext = createContext(null);
+
+export function useCart() {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error('useCart must be used within CartProvider');
+  }
+  return context;
+}
 
 export function CartProvider({ children }) {
   const [items, setItems] = useState(() => loadCartItems());
@@ -257,12 +270,4 @@ export function CartProvider({ children }) {
   }, [items, isOpen, openCart, closeCart, toggleCart, addItem, updateQty, removeItem, clearCart, restoreItems, placeOrder]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
-}
-
-export function useCart() {
-  const context = useContext(CartContext);
-  if (!context) {
-    throw new Error('useCart must be used within CartProvider');
-  }
-  return context;
 }

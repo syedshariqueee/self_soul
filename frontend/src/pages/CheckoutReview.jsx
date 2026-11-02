@@ -2,7 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import CheckoutLayout from '../components/checkout/CheckoutLayout';
 import OrderSummary from '../components/checkout/OrderSummary';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../context/useCart';
+
 import { computeTotals, formatAddress, formatPayment, readDraft, writeDraft } from '../utils/checkout';
 
 export default function CheckoutReview() {

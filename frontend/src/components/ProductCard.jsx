@@ -24,14 +24,18 @@ export default function ProductCard({
   title,
   rating = 5,
   price,
+  compareAtPrice,
+  discountPercent,
   href = '#',
 }) {
   const className = 'group flex w-full max-w-[303px] flex-col text-left';
+  const showCompare =
+    typeof compareAtPrice === 'number' && compareAtPrice > Number(price);
   const inner = (
     <>
       <div className="relative aspect-[303/364] w-full overflow-hidden bg-[#e8e4df]">
         {badge ? (
-          <span className="absolute left-3 top-3 z-10 rounded-full bg-[#f7efe3] px-2.5 py-1 font-['Montserrat',sans-serif] text-[10px] font-medium tracking-wide text-[#1a3636] sm:text-[11px]">
+          <span className="absolute left-3 top-3 z-10 rounded-full bg-white/95 px-2.5 py-1 font-['Montserrat',sans-serif] text-[10px] font-medium tracking-wide text-[#1a3636] sm:text-[11px]">
             {badge}
           </span>
         ) : null}
@@ -45,8 +49,14 @@ export default function ProductCard({
         {title}
       </h3>
       <StarRating rating={rating} />
-      <div className="mt-2 font-['Montserrat',sans-serif] text-sm">
+      <div className="mt-2 flex flex-wrap items-baseline gap-x-2 gap-y-0.5 font-['Montserrat',sans-serif] text-sm">
+        {showCompare ? (
+          <span className="text-[#8b857a] line-through">₹ {compareAtPrice}</span>
+        ) : null}
         <span className="font-medium text-[#1a3636]">₹ {price}</span>
+        {showCompare && discountPercent ? (
+          <span className="text-[12px] font-medium text-[#41534D]">{discountPercent}% OFF</span>
+        ) : null}
       </div>
     </>
   );

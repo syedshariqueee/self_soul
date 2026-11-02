@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Newsletter from '../components/Newsletter';
 import { getProductBySlug } from '../data/products';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../context/useCart';
+
 import { AUTH_EVENT, readAuthUser } from '../utils/auth';
 import { WISHLIST_EVENT, isWishlisted, toggleWishlistId } from '../utils/wishlist';
 
@@ -55,7 +56,9 @@ function Accordion({ title, children, defaultOpen = false }) {
 export default function ProductDetail() {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const product = useMemo(() => getProductBySlug(slug), [slug]);
+  const catalogBase = location.pathname.startsWith('/value-sets') ? '/value-sets' : '/bath';
   const { addItem, openCart } = useCart();
   const [activeImage, setActiveImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
@@ -92,8 +95,8 @@ export default function ProductDetail() {
           <Header />
           <div className="px-6 py-24 text-center font-['Montserrat',sans-serif]">
             <h1 className="text-2xl font-semibold">Product not found</h1>
-            <Link to="/bath" className="mt-4 inline-block text-sm underline">
-              Back to Bath
+            <Link to={catalogBase} className="mt-4 inline-block text-sm underline">
+              Back to shop
             </Link>
           </div>
           <Footer />
@@ -108,7 +111,8 @@ export default function ProductDetail() {
   const subtitle = (product.subtitle || '').replace(/^With\s+/i, '');
 
   function requireLogin() {
-    navigate(`/login?next=${encodeURIComponent(`/bath/${product.slug}`)}`);
+    const base = product.catalogPath || catalogBase;
+    navigate(`/login?next=${encodeURIComponent(`${base}/${product.slug}`)}`);
   }
 
   function toggleWishlist() {

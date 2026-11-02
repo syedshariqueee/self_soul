@@ -2,7 +2,8 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { useCart } from '../context/CartContext';
+import { useCart } from '../context/useCart';
+
 
 export default function Cart() {
   const navigate = useNavigate();

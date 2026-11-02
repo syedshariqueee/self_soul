@@ -33,6 +33,10 @@ export default function Footer() {
                     <Link to="/bath" className="hover:underline">
                       {item}
                     </Link>
+                  ) : item === 'Value Sets' ? (
+                    <Link to="/value-sets" className="hover:underline">
+                      {item}
+                    </Link>
                   ) : (
                     <a href="#" className="hover:underline">
                       {item}

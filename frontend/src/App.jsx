@@ -13,6 +13,7 @@ import TermsConditions from './pages/TermsConditions';
 import ReturnsPolicy from './pages/ReturnsPolicy';
 import DeliveryInformation from './pages/DeliveryInformation';
 import Bath from './pages/Bath';
+import ValueSets from './pages/ValueSets';
 import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
@@ -40,6 +41,8 @@ function App() {
           <Route path="/clinically-tested" element={<ClinicallyTested />} />
           <Route path="/bath" element={<Bath />} />
           <Route path="/bath/:slug" element={<ProductDetail />} />
+          <Route path="/value-sets" element={<ValueSets />} />
+          <Route path="/value-sets/:slug" element={<ProductDetail />} />
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/orders/:orderId" element={<OrderDetail />} />

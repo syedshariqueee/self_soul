@@ -6,9 +6,9 @@ import BrandStoryBanner from '../components/BrandStoryBanner';
 import { BESTSELLERS } from '../data/products';
 
 const bathRituals = [
-  { title: "Relaxing", img: "/home/relaxing.jpeg" },
-  { title: "Healing", img: "/home/healing.jpeg" },
-  { title: "Nourishing", img: "/home/nourishing.jpeg" },
+  { title: "Relaxing", img: "/home/relaxing.jpeg", href: "/bath?category=fizz" },
+  { title: "Healing", img: "/home/healing.jpeg", href: "/bath?category=salts" },
+  { title: "Nourishing", img: "/home/nourishing.jpeg", href: "/bath?category=oils" },
 ];
 
 const ingredientTags = [
@@ -39,14 +39,15 @@ export default function Home() {
           </h3>
           <div className="mx-auto mt-8 grid max-w-[1200px] justify-items-center gap-4 sm:mt-10 sm:grid-cols-3 sm:gap-5 md:gap-6">
             {bathRituals.map((item) => (
-              <article
+              <Link
                 key={item.title}
-                className="relative aspect-square w-full max-w-[368px] overflow-hidden rounded-[12px] bg-[#e8e4dc]"
+                to={item.href}
+                className="group relative aspect-square w-full max-w-[368px] overflow-hidden rounded-[12px] bg-[#e8e4dc]"
               >
                 <img
                   src={item.img}
                   alt={item.title}
-                  className="absolute inset-0 h-full w-full scale-105 object-cover blur-[2.6px]"
+                  className="absolute inset-0 h-full w-full scale-105 object-cover blur-[2.6px] transition-transform duration-500 group-hover:scale-110"
                 />
                 <div
                   className="absolute inset-0 bg-black/[0.28]"
@@ -55,7 +56,7 @@ export default function Home() {
                 <p className="absolute inset-0 flex items-center justify-center font-['Montserrat',sans-serif] text-xl font-medium text-white sm:text-2xl">
                   {item.title}
                 </p>
-              </article>
+              </Link>
             ))}
           </div>
         </section>
@@ -99,8 +100,8 @@ export default function Home() {
                 <h2 className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl">Best Sellers</h2>
                 <p className="mt-3 text-lg font-medium leading-snug text-white sm:text-xl">Everlasting Favourites</p>
                 <p className="mt-4 max-w-[22ch] text-xs leading-relaxed text-white/85 sm:text-sm">
-                  <span className="block">our crowd-pleasers with</span>
-                  <span className="block">guaranteed</span>
+                  <span className="block">our crowd-pleasers from</span>
+                  <span className="block">across our bath range</span>
                 </p>
                 <Link
                   to="/bath"
@@ -122,7 +123,7 @@ export default function Home() {
                     alt={item.title}
                     width={240}
                     height={240}
-                    className="absolute inset-0 h-full w-full object-cover"
+                    className="absolute inset-0 h-full w-full object-contain"
                     loading="lazy"
                   />
                 </Link>
